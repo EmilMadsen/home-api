@@ -1,4 +1,4 @@
-package dk.emilmadsen.homeapi.controller;
+package dk.emilmadsen.homeapi.web;
 
 import com.google.gson.Gson;
 import dk.emilmadsen.homeapi.model.HumidSensorLog;
@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+import java.util.List;
 
 
 @RestController
@@ -19,15 +19,19 @@ public class SensorController {
     private final Gson gson;
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable String id) {
-        return gson.toJson(service.findById(Long.valueOf(id)));
+    public HumidSensorLog findById(@PathVariable String id) {
+        return service.findById(Long.valueOf(id)).orElse(null);
+    }
+
+    @GetMapping
+    public List<HumidSensorLog> getLatest() {
+        return service.getLatest();
     }
 
     @PostMapping
-    public String save(@RequestBody String body, HttpServletRequest request) {
-        HumidSensorLog log = gson.fromJson(body, HumidSensorLog.class);
+    public HumidSensorLog save(@RequestBody HumidSensorLog log, HttpServletRequest request) {
         log.setDevice(request.getRemoteAddr());
-        return gson.toJson(service.save(log));
+        return service.save(log);
     }
 
 

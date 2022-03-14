@@ -6,3 +6,7 @@ spring:
     password: password
   jpa:
     database: POSTGRESQL
+    generate-ddl: true
+  http:
+    converters:
+      preferred-json-mapper: gson

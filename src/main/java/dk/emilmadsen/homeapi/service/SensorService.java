@@ -5,6 +5,8 @@ import dk.emilmadsen.homeapi.model.HumidSensorLog;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,4 +23,7 @@ public class SensorService {
         return humidSensorRepository.save(log);
     }
 
+    public List<HumidSensorLog> getLatest() {
+        return humidSensorRepository.findAllByTimestampGreaterThan(ZonedDateTime.now().minusHours(1));
+    }
 }
